@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import UserContext from "./utilities/context/userContext";
+import { useEffect, useState } from "react";
+import Main from "./components/Main";
+import Auth from "./components/Auth";
+import Header from "./components/Header";
+import { useNavigate } from "react-router";
+import { checkToken } from "./api/auth";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
+  const [user, setUser] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const logedIn = checkToken();
+
+    if (logedIn) {
+      navigate("/");
+      setUser(true);
+    } else {
+      navigate("/login");
+      setUser(false);
+    }
+  }, [user, navigate]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={[user, setUser]}>
+      <div className="p-3">
+        <Header />
+        {user ? <Main /> : <Auth />}
+      </div>
+    </UserContext.Provider>
   );
 }
 
