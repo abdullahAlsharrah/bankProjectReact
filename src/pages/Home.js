@@ -6,7 +6,7 @@ import { depositOrwithdraw } from "../api/transactions";
 import { mainColor } from "../utilities/constants";
 
 const Home = () => {
-  const [trasnData, setTrasnData] = useState({});
+  const [trasnData, setTrasnData] = useState({ type: "deposit" });
   const queryClient = useQueryClient();
 
   const { data: user } = useQuery({
